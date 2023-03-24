@@ -70,6 +70,7 @@ class MainActivity : AppCompatActivity() {
         Timer("SettingSub", false).schedule(2000) {
             if (mqttClient.isConnected()) {
                 val topic = "porte_sub"
+                Thread.sleep(1000)
                 mqttClient.subscribe(topic)
             }
         }
@@ -105,9 +106,12 @@ class MainActivity : AppCompatActivity() {
                 Log.w("Debug", "Message received from host '$SOLACE_MQTT_HOST': $mqttMessage")
                 textViewNumMsgs.text = ("${textViewNumMsgs.text.toString().toInt() + 1}")
                 tag = "";
-                tag = "$mqttMessage\n"
-                CompareParseValueToSub(tag)
-                textViewMsgPayload.text = tag
+                if (mqttMessage.toString() != "true" || mqttMessage.toString() != "false") {
+                    tag = "$mqttMessage\n"
+                    CompareParseValueToSub(tag)
+                    textViewMsgPayload.text = tag
+                }
+
             }
 
             override fun deliveryComplete(iMqttDeliveryToken: IMqttDeliveryToken) {
@@ -155,9 +159,12 @@ class MainActivity : AppCompatActivity() {
                     if (!response.isSuccessful) throw IOException("Unexpected code $response")
                     value = response.body()!!.string()
                     if (mqttClient.isConnected()){
-                        val topic = "porte_sub"
-                        Thread.sleep(1000)
-                        mqttClient.publish(topic, value)
+                        var isSend = true
+                        if (isSend && value != "false"){
+                            val topic = "porte_sub"
+                            mqttClient.publish(topic, value)
+                            isSend = false
+                        }
                     }
                     saveToLog(tagScan, value)
                     Log.d("Debug", value)
