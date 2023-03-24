@@ -4,18 +4,13 @@ package com.example.myapplication
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.os.SystemClock
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.MotionEvent
-import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.example.myapplication.mqtt.MqttClientHelper
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import okhttp3.*
@@ -24,8 +19,6 @@ import org.eclipse.paho.client.mqttv3.MqttCallbackExtended
 import org.eclipse.paho.client.mqttv3.MqttException
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.io.IOException
-import java.lang.reflect.Type
-import java.net.URLEncoder
 import java.util.*
 import kotlin.concurrent.schedule
 
@@ -43,11 +36,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         textViewMsgPayload.movementMethod = ScrollingMovementMethod()
-
         setMqttCallBack()
-
         // initialize 'num msgs received' field in the view
         textViewNumMsgs.text = "0"
 
@@ -69,23 +59,6 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        // sub button
-        btnSub.setOnClickListener { view ->
-            var snackbarMsg : String
-            val topic = "porte_sub"
-            snackbarMsg = "Cannot subscribe to empty topic!"
-            if (topic.isNotEmpty()) {
-                snackbarMsg = try {
-                    mqttClient.subscribe(topic)
-                    "Subscribed to topic '$topic'"
-                    // Publier sur le topic "porte_sub" pour que le serveur envoie un message
-                } catch (ex: MqttException) {
-                    "Error subscribing to topic: $topic"
-                }
-            }
-            Snackbar.make(view, snackbarMsg, Snackbar.LENGTH_SHORT)
-                .setAction("Action", null).show()
-        }
 
         // Redirection vers l'activité de l'historique
         btnHistory.setOnClickListener {
@@ -93,6 +66,13 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+
+        Timer("SettingSub", false).schedule(2000) {
+            if (mqttClient.isConnected()) {
+                val topic = "porte_sub"
+                mqttClient.subscribe(topic)
+            }
+        }
 
         Timer("CheckMqttConnection", false).schedule(3000) {
             if (!mqttClient.isConnected()) {
@@ -103,6 +83,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onBackPressed() {
+        return
+    }
     private fun setMqttCallBack() {
         mqttClient.setCallback(object : MqttCallbackExtended {
             override fun connectComplete(b: Boolean, s: String) {
@@ -171,6 +154,11 @@ class MainActivity : AppCompatActivity() {
                 response.use {
                     if (!response.isSuccessful) throw IOException("Unexpected code $response")
                     value = response.body()!!.string()
+                    if (mqttClient.isConnected()){
+                        val topic = "porte_sub"
+                        Thread.sleep(1000)
+                        mqttClient.publish(topic, value)
+                    }
                     saveToLog(tagScan, value)
                     Log.d("Debug", value)
                 }

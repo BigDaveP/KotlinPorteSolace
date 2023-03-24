@@ -30,6 +30,18 @@
                 tools:ignore="MissingConstraints"
                 tools:layout_editor_absoluteX="11dp"
                 tools:layout_editor_absoluteY="59dp" />
+
+            <ProgressBar
+                android:id="@+id/progressBar2"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="121dp"
+                android:layout_height="101dp"
+                android:layout_marginStart="100dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="4dp"
+                android:background="#00E13030"
+                app:layout_constraintStart_toEndOf="@+id/btnRetour"
+                app:layout_constraintTop_toTopOf="@+id/btnRetour" />
         </LinearLayout>
     </ScrollView>
 
@@ -56,5 +68,6 @@
         android:text="Retour"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

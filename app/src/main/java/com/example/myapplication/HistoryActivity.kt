@@ -3,11 +3,17 @@ package com.example.myapplication
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.ProgressBar
 import android.widget.TextView
 import com.beust.klaxon.Klaxon
 import kotlinx.android.synthetic.main.activity_history.*
 import okhttp3.*
 import java.io.IOException
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.concurrent.schedule
 import kotlin.math.log
 
 class HistoryActivity : AppCompatActivity() {
@@ -21,18 +27,25 @@ class HistoryActivity : AppCompatActivity() {
         btnRetour.setOnClickListener {
             finish()
         }
-        getHistory()
+        Timer("CheckApiStatus", false).schedule(2000){
+            getHistory()
+        }
 
-        Thread.sleep(2000)
-        if (isCalled){
-            for (log in logs){
-                textViewAPI.text = textViewAPI.text.toString() + "Tag ID : " +log.UID + "\n Date : " + log.date + "\n Utilisateur : " + log.username + "\n Serrure : " + log.serrure + "\n\n"
-                textViewAPI.text = textViewAPI.text.toString() + "--------------------------------------------\n\n\n"
+        Thread(Runnable {
+            while (!isCalled) {
+                Thread.sleep(1000)
             }
-        }
-        else{
-            textViewAPI.text = "Erreur de connexion"
-        }
+            runOnUiThread {
+                progressBar2.setVisibility(View.INVISIBLE)
+                textViewAPI.text = ""
+                for (log in logs) {
+                    textViewAPI.text = textViewAPI.text.toString() + "Tag ID : " +log.UID + "\n Date : " + log.date + "\n Utilisateur : " + log.username + "\n Serrure : " + log.serrure + "\n\n"
+                    textViewAPI.text = textViewAPI.text.toString() + "--------------------------------------------\n\n\n"
+                }
+            }
+        }).start()
+
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -54,5 +67,6 @@ class HistoryActivity : AppCompatActivity() {
 
             }
         })
+
     }
 }
