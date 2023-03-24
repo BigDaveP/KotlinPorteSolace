@@ -41,23 +41,7 @@ class MainActivity : AppCompatActivity() {
         // initialize 'num msgs received' field in the view
         textViewNumMsgs.text = "0"
 
-        // pub button
-        btnPub.setOnClickListener { view ->
-            var snackbarMsg : String
-            val topic = "porte_sub"
-            snackbarMsg = "Cannot publish to empty topic!"
-            if (topic.isNotEmpty()) {
-                snackbarMsg = try {
-                    mqttClient.publish(topic, value)
-                    "Published to topic '$topic'"
-                } catch (ex: MqttException) {
-                    "Error publishing to topic: $topic"
-                }
-            }
-            Snackbar.make(view, snackbarMsg, 300)
-                .setAction("Action", null).show()
 
-        }
 
 
         // Redirection vers l'activité de l'historique

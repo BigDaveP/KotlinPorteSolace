@@ -38,7 +38,7 @@
                 android:layout_height="101dp"
                 android:layout_marginStart="100dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="150dp"
                 android:background="#00E13030"
                 app:layout_constraintStart_toEndOf="@+id/btnRetour"
                 app:layout_constraintTop_toTopOf="@+id/btnRetour" />
