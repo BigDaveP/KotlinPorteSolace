@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity() {
 
         Timer("CheckMqttConnection", false).schedule(3000) {
             if (!mqttClient.isConnected()) {
-                Snackbar.make(textViewNumMsgs, "Failed to connect to: '$SOLACE_MQTT_HOST' within 3 seconds", Snackbar.LENGTH_INDEFINITE)
+                Snackbar.make(textViewNumMsgs, "Impossible de se connecter à l'adresse suivante: '$SOLACE_MQTT_HOST', vérifier votre connexion internet", Snackbar.LENGTH_INDEFINITE)
                     .setAction("Action", null).show()
             }
         }

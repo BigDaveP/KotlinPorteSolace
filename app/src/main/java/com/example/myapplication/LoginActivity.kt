@@ -23,8 +23,8 @@ class LoginActivity : AppCompatActivity() {
             Log.d("user", user)
             Log.d("pass", pass)
 
-            /*val intent = Intent(this@LoginActivity, MainActivity::class.java)
-            startActivity(intent)*/
+            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+            startActivity(intent)
         }
 
 
