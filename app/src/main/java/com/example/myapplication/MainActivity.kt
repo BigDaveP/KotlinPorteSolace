@@ -3,11 +3,17 @@ package com.example.myapplication
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.PopupMenu
+import android.widget.Toolbar
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.myapplication.mqtt.MqttClientHelper
 import com.google.android.material.snackbar.Snackbar
@@ -21,6 +27,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.io.IOException
 import java.util.*
 import kotlin.concurrent.schedule
+import kotlin.math.log
 
 
 class MainActivity : AppCompatActivity() {
@@ -33,23 +40,20 @@ class MainActivity : AppCompatActivity() {
         MqttClientHelper(this)
     }
 
+        // Redirection vers l'activité de l'historique
+
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         textViewMsgPayload.movementMethod = ScrollingMovementMethod()
         setMqttCallBack()
         // initialize 'num msgs received' field in the view
-        textViewNumMsgs.text = "0"
 
-
-
-
-        // Redirection vers l'activité de l'historique
         btnHistory.setOnClickListener {
             val intent = Intent(this@MainActivity, HistoryActivity::class.java)
             startActivity(intent)
         }
-
 
         Timer("SettingSub", false).schedule(2000) {
             if (mqttClient.isConnected()) {
@@ -61,8 +65,11 @@ class MainActivity : AppCompatActivity() {
 
         Timer("CheckMqttConnection", false).schedule(3000) {
             if (!mqttClient.isConnected()) {
-                Snackbar.make(textViewNumMsgs, "Impossible de se connecter à l'adresse suivante: '$SOLACE_MQTT_HOST', vérifier votre connexion internet", Snackbar.LENGTH_INDEFINITE)
-                    .setAction("Action", null).show()
+                Snackbar.make(
+                    findViewById(android.R.id.content),
+                    "Connection au serveur MQTT perdue",
+                    Snackbar.LENGTH_LONG
+                ).show()
             }
         }
 
@@ -85,15 +92,20 @@ class MainActivity : AppCompatActivity() {
                 Snackbar.make(findViewById(android.R.id.content), snackbarMsg, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
             }
+            @SuppressLint("SetTextI18n")
             @Throws(Exception::class)
             override fun messageArrived(topic: String, mqttMessage: MqttMessage) {
                 Log.w("Debug", "Message received from host '$SOLACE_MQTT_HOST': $mqttMessage")
-                textViewNumMsgs.text = ("${textViewNumMsgs.text.toString().toInt() + 1}")
                 tag = "";
                 if (mqttMessage.toString() != "true" || mqttMessage.toString() != "false") {
                     tag = "$mqttMessage\n"
                     CompareParseValueToSub(tag)
                     textViewMsgPayload.text = tag
+                }
+                else if (mqttMessage.toString() == "C089") {
+                    Log.d("Debug", "C089")
+                    textViewMsgSerrure1Status.text = "Ouvert"
+                    textViewMsgSerrure1Status.setBackgroundColor(Color.parseColor("#00FF00"))
                 }
 
             }
@@ -114,10 +126,11 @@ class MainActivity : AppCompatActivity() {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
+        when (item.itemId) {
+            R.id.action_settings -> startActivity(Intent(this@MainActivity, SettingActivity::class.java))
+
         }
+        return true
     }
 
     override fun onDestroy() {
@@ -148,11 +161,12 @@ class MainActivity : AppCompatActivity() {
                             val topic = "porte_sub"
                             mqttClient.publish(topic, value)
                             isSend = false
+                            saveToLog(tagScan, value)
+                            Log.d("Debug", value)
                         }
                     }
-                    saveToLog(tagScan, value)
-                    Log.d("Debug", value)
                 }
+
             }
         })
     }

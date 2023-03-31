@@ -8,4 +8,8 @@
     <string name="subscribe_to_topic">Subscribe to topic</string>
     <string name="message_payload">Message payload</string>
     <string name="heading_msg_payload"><u>Received Message payloads</u></string>
+    <string name="tcp_172_16_5_103_1883">tcp://172.16.5.103:1883</string>
+    <string name="http_167_114_96_59_2223">http://167.114.96.59:2223</string>
+    <string name="adresse_de_l_api">Adresse de l\'API :</string>
+    <string name="adresse_ip_du_broker">Adresse IP du broker :</string>
 </resources>
