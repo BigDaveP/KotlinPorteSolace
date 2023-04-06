@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.os.Debug
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.Menu
@@ -15,8 +16,10 @@ import android.widget.PopupMenu
 import android.widget.Toolbar
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.example.myapplication.model.Serrures
 import com.example.myapplication.mqtt.MqttClientHelper
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import okhttp3.*
@@ -48,6 +51,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         textViewMsgPayload.movementMethod = ScrollingMovementMethod()
         setMqttCallBack()
+        getSerrures()
         // initialize 'num msgs received' field in the view
 
         btnHistory.setOnClickListener {
@@ -102,12 +106,17 @@ class MainActivity : AppCompatActivity() {
                     CompareParseValueToSub(tag)
                     textViewMsgPayload.text = tag
                 }
-                else if (mqttMessage.toString() == "C089") {
-                    Log.d("Debug", "C089")
+
+                if (mqttMessage.toString().contains("C089 true")) {
+                    Log.d("Debug", "Oui")
                     textViewMsgSerrure1Status.text = "Ouvert"
                     textViewMsgSerrure1Status.setBackgroundColor(Color.parseColor("#00FF00"))
                 }
-
+                if (mqttMessage.toString().contains("C089 false")) {
+                    Log.d("Debug", "Non")
+                    textViewMsgSerrure1Status.text = "Fermé"
+                    textViewMsgSerrure1Status.setBackgroundColor(Color.parseColor("#FF0000"))
+                }
             }
 
             override fun deliveryComplete(iMqttDeliveryToken: IMqttDeliveryToken) {
@@ -138,6 +147,33 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
+    fun getSerrures(): ArrayList<String> {
+        val request = Request.Builder()
+            .url("http://167.114.96.59:2223/api/getSerrures")
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                response.use {
+                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
+                    value = response.body()!!.string()
+                    val gson = Gson()
+                    val serrures = gson.fromJson(value, Array<Serrures>::class.java).toList()
+                    runOnUiThread {
+                        for (serrure in serrures) {
+                            if (serrure.id == "C089") {
+                                textViewMsgSerrure1.text = serrure.name
+                            }
+                        }
+                    }
+                }
+            }
+        })
+        }
 
     //Permet de récupérer la liste des utilisateurs et de les afficher dans la liste "userList"
     @SuppressLint("SetTextI18n")
@@ -178,6 +214,7 @@ class MainActivity : AppCompatActivity() {
         val c = Calendar.getInstance().time
         //Url encode
         val url = "http://167.114.96.59:2223/api/saveToLogs/$user/$tagToSend/$value/$c"
+        Log.d("DebugURL", url)
         val parseURL = url.replace(" ", "%20").replace("\n", "")
         Log.d("Debug", parseURL)
         //Send to server
@@ -192,7 +229,7 @@ class MainActivity : AppCompatActivity() {
             override fun onResponse(call: Call, response: Response) {
                 response.use {
                     if (!response.isSuccessful) throw IOException("Unexpected code $response")
-                    Log.d("Debug", value)
+                    Log.d("SendToAPI", "$user $value $tagToSend $c")
                 }
             }
         })

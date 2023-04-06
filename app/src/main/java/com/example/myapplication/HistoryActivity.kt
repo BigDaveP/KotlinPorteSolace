@@ -3,18 +3,15 @@ package com.example.myapplication
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.ProgressBar
-import android.widget.TextView
 import com.beust.klaxon.Klaxon
+import com.example.myapplication.model.Logs
 import kotlinx.android.synthetic.main.activity_history.*
 import okhttp3.*
 import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.concurrent.schedule
-import kotlin.math.log
 
 class HistoryActivity : AppCompatActivity() {
     private val klaxon = Klaxon()
