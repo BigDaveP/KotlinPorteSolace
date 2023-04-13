@@ -9,13 +9,18 @@ import android.os.Bundle
 import android.os.Debug
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
+import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.PopupMenu
+import android.widget.TextView
 import android.widget.Toolbar
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.beust.klaxon.Klaxon
+import com.example.myapplication.model.Logs
 import com.example.myapplication.model.Serrures
 import com.example.myapplication.mqtt.MqttClientHelper
 import com.google.android.material.snackbar.Snackbar
@@ -29,6 +34,7 @@ import org.eclipse.paho.client.mqttv3.MqttException
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.io.IOException
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.concurrent.schedule
 import kotlin.math.log
 
@@ -37,11 +43,13 @@ class MainActivity : AppCompatActivity() {
 
     var value = "";
     var isScanned = false
+    var serruresListID = ArrayList<String>()
     private var tag = ""
     private val client = OkHttpClient()
     private val mqttClient by lazy {
         MqttClientHelper(this)
     }
+    private val klaxon = Klaxon()
 
         // Redirection vers l'activité de l'historique
 
@@ -109,13 +117,16 @@ class MainActivity : AppCompatActivity() {
 
                 if (mqttMessage.toString().contains("C089 true")) {
                     Log.d("Debug", "Oui")
-                    textViewMsgSerrure1Status.text = "Ouvert"
-                    textViewMsgSerrure1Status.setBackgroundColor(Color.parseColor("#00FF00"))
+                    for (i in 0 until serruresListID.size) {
+                        Log.d("Debug", "ID: ${serruresListID[i]}")
+                    }
+                    /*textViewMsgSerrure1Status.text = "Ouvert"
+                    textViewMsgSerrure1Status.setBackgroundColor(Color.parseColor("#00FF00"))*/
                 }
                 if (mqttMessage.toString().contains("C089 false")) {
                     Log.d("Debug", "Non")
-                    textViewMsgSerrure1Status.text = "Fermé"
-                    textViewMsgSerrure1Status.setBackgroundColor(Color.parseColor("#FF0000"))
+                    /*textViewMsgSerrure1Status.text = "Fermé"
+                    textViewMsgSerrure1Status.setBackgroundColor(Color.parseColor("#FF0000"))*/
                 }
             }
 
@@ -147,7 +158,7 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    fun getSerrures(): ArrayList<String> {
+    fun getSerrures() {
         val request = Request.Builder()
             .url("http://167.114.96.59:2223/api/getSerrures")
             .build()
@@ -157,23 +168,69 @@ class MainActivity : AppCompatActivity() {
                 e.printStackTrace()
             }
 
+            @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+            @SuppressLint("RtlHardcoded")
             override fun onResponse(call: Call, response: Response) {
                 response.use {
                     if (!response.isSuccessful) throw IOException("Unexpected code $response")
                     value = response.body()!!.string()
-                    val gson = Gson()
-                    val serrures = gson.fromJson(value, Array<Serrures>::class.java).toList()
+                    val serrures = klaxon.parseArray<Serrures>(value) as ArrayList<Serrures>
+                    // append in the scroll view
                     runOnUiThread {
                         for (serrure in serrures) {
-                            if (serrure.id == "C089") {
-                                textViewMsgSerrure1.text = serrure.name
-                            }
+                            // Create a container for the text views
+                            val container = LinearLayout(this@MainActivity)
+                            container.orientation = LinearLayout.HORIZONTAL
+                            container.setPadding(50, 0, 0, 10)
+                            container.gravity = Gravity.CENTER
+                            container.setBackgroundColor(Color.parseColor("#FFFFFF"))
+                            container.layoutParams = LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT
+                            )
+
+                            // Create a text view for the message
+                            val textView = TextView(this@MainActivity)
+                            textView.text = serrure.serrure
+                            textView.textSize = 20f
+                            textView.setTextColor(Color.parseColor("#000000"))
+                            textView.setPadding(0, 10, 0, 20)
+                            textView.gravity = Gravity.START
+                            textView.layoutParams = LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT,
+                                1f
+                            )
+                            container.addView(textView)
+
+                            // Create a text view for the status
+                            val textViewStatusColor = TextView(this@MainActivity)
+                            //Create an id for the textview
+                            val tempID = serrure.serrure + "Status"
+                            val toByteArray = serrure.serrure.toByteArray()
+                            textViewStatusColor.id = (serrure.serrure + "Status").toByte().toInt()
+                            serruresListID.add(textViewStatusColor.id.toString())
+                            textViewStatusColor.text = "Fermé"
+                            textViewStatusColor.textSize = 20f
+                            textViewStatusColor.setBackgroundColor(Color.parseColor("#FF0000"))
+                            textViewStatusColor.setTextColor(Color.parseColor("#FFFFFF"))
+                            textViewStatusColor.setPadding(0, 0, 0, 10)
+                            textViewStatusColor.gravity = Gravity.CENTER
+                            textViewStatusColor.layoutParams = LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT,
+                                1f
+                            )
+                            container.addView(textViewStatusColor)
+
+                            // Add the container to the parent view
+                            linearlayout.addView(container)
                         }
                     }
                 }
             }
         })
-        }
+    }
 
     //Permet de récupérer la liste des utilisateurs et de les afficher dans la liste "userList"
     @SuppressLint("SetTextI18n")

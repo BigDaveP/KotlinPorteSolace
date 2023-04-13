@@ -1,4 +1,11 @@
 package com.example.myapplication.model
 
-class Serrures {
-}
+import com.beust.klaxon.Json
+
+
+data class Serrures(
+    @Json(name = "_id")
+    val id: String,
+    @Json(name = "serrure")
+    val serrure: String
+)

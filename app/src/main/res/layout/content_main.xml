@@ -12,86 +12,17 @@
 
 
     <TextView
-        android:id="@+id/textViewMsg"
-        android:layout_width="167dp"
-        android:layout_height="39dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="80dp"
-        android:background="#DDDDDD"
-        android:text="Local : C-089"
-        android:textSize="25dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textViewMsgSerrure1Status"
-        android:layout_width="112dp"
-        android:layout_height="38dp"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="43dp"
-        android:layout_marginRight="43dp"
-        android:layout_marginBottom="432dp"
-        android:background="#F30303"
-        android:gravity="center_horizontal"
-        android:text="Fermé"
-        android:textAlignment="center"
-        android:textColor="#FFFFFF"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/textViewMsgPayload"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/textViewMsg"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:ignore="MissingConstraints" />
-
-    <TextView
-        android:id="@+id/textViewMsg3"
-        android:layout_width="167dp"
-        android:layout_height="39dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="150dp"
-        android:background="#DDDDDD"
-        android:text="Local : C-074"
-        android:textSize="25dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textViewMsg4"
-        android:layout_width="112dp"
-        android:layout_height="38dp"
-        android:layout_marginTop="220dp"
-        android:layout_marginEnd="43dp"
-        android:layout_marginRight="43dp"
-        android:layout_marginBottom="432dp"
-        android:background="#F30303"
-        android:gravity="center_horizontal"
-        android:text="Fermé"
-        android:textAlignment="center"
-        android:textColor="#FFFFFF"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/textViewMsgPayload"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/textViewMsg"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.358"
-        tools:ignore="MissingConstraints" />
-
-    <TextView
         android:id="@+id/textViewMsgPayload"
-        android:layout_width="328dp"
-        android:layout_height="0dp"
+        android:layout_width="333dp"
+        android:layout_height="29dp"
         android:layout_marginBottom="156dp"
         android:gravity="bottom"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView3" />
 
     <Button
         android:id="@+id/btnHistory"
@@ -103,6 +34,38 @@
         android:text="Historique"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ScrollView
+        android:id="@+id/scrollView3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginRight="1dp"
+        android:layout_marginBottom="45dp"
+        app:layout_constraintBottom_toTopOf="@+id/textViewMsgPayload"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/linearlayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewSerrure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="11dp"
+                tools:layout_editor_absoluteY="59dp" />
+        </LinearLayout>
+    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
