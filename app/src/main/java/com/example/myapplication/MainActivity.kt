@@ -25,6 +25,7 @@ import com.example.myapplication.model.Serrures
 import com.example.myapplication.mqtt.MqttClientHelper
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
+import io.github.cdimascio.dotenv.dotenv
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import okhttp3.*
@@ -159,8 +160,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getSerrures() {
+        val dotenv = dotenv {
+            directory = "/assets"
+            filename = "env" // instead of '.env', use 'env'
+        }
+        val token = dotenv["TOKEN"]
         val request = Request.Builder()
             .url("http://167.114.96.59:2223/api/getSerrures")
+            .header("Authorization", "Bearer $token")
             .build()
 
         client.newCall(request).enqueue(object : Callback {
@@ -177,54 +184,54 @@ class MainActivity : AppCompatActivity() {
                     val serrures = klaxon.parseArray<Serrures>(value) as ArrayList<Serrures>
                     // append in the scroll view
                     runOnUiThread {
-                        for (serrure in serrures) {
-                            // Create a container for the text views
-                            val container = LinearLayout(this@MainActivity)
-                            container.orientation = LinearLayout.HORIZONTAL
-                            container.setPadding(50, 0, 0, 10)
-                            container.gravity = Gravity.CENTER
-                            container.setBackgroundColor(Color.parseColor("#FFFFFF"))
-                            container.layoutParams = LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.MATCH_PARENT,
-                                LinearLayout.LayoutParams.WRAP_CONTENT
-                            )
+                        if (serrures.size > 0) {
+                            for (serrure in serrures) {
+                                // Create a container for the text views
+                                val container = LinearLayout(this@MainActivity)
+                                container.orientation = LinearLayout.HORIZONTAL
+                                container.setPadding(50, 0, 0, 10)
+                                container.gravity = Gravity.CENTER
+                                container.setBackgroundColor(Color.parseColor("#FFFFFF"))
+                                container.layoutParams = LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.MATCH_PARENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT
+                                )
 
-                            // Create a text view for the message
-                            val textView = TextView(this@MainActivity)
-                            textView.text = serrure.serrure
-                            textView.textSize = 20f
-                            textView.setTextColor(Color.parseColor("#000000"))
-                            textView.setPadding(0, 10, 0, 20)
-                            textView.gravity = Gravity.START
-                            textView.layoutParams = LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.MATCH_PARENT,
-                                LinearLayout.LayoutParams.WRAP_CONTENT,
-                                1f
-                            )
-                            container.addView(textView)
+                                // Create a text view for the message
+                                val textView = TextView(this@MainActivity)
+                                textView.text = serrure.serrure
+                                textView.textSize = 20f
+                                textView.setTextColor(Color.parseColor("#000000"))
+                                textView.setPadding(0, 10, 0, 20)
+                                textView.gravity = Gravity.START
+                                textView.layoutParams = LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.MATCH_PARENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                                    1f
+                                )
+                                container.addView(textView)
 
-                            // Create a text view for the status
-                            val textViewStatusColor = TextView(this@MainActivity)
-                            //Create an id for the textview
-                            val tempID = serrure.serrure + "Status"
-                            val toByteArray = serrure.serrure.toByteArray()
-                            textViewStatusColor.id = (serrure.serrure + "Status").toByte().toInt()
-                            serruresListID.add(textViewStatusColor.id.toString())
-                            textViewStatusColor.text = "Fermé"
-                            textViewStatusColor.textSize = 20f
-                            textViewStatusColor.setBackgroundColor(Color.parseColor("#FF0000"))
-                            textViewStatusColor.setTextColor(Color.parseColor("#FFFFFF"))
-                            textViewStatusColor.setPadding(0, 0, 0, 10)
-                            textViewStatusColor.gravity = Gravity.CENTER
-                            textViewStatusColor.layoutParams = LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.MATCH_PARENT,
-                                LinearLayout.LayoutParams.WRAP_CONTENT,
-                                1f
-                            )
-                            container.addView(textViewStatusColor)
+                                // Create a text view for the status
+                                val textViewStatusColor = TextView(this@MainActivity)
+                                //Create an id for the textview
+                                val id = View.generateViewId()
+                                serruresListID.add(textViewStatusColor.id.toString())
+                                textViewStatusColor.text = "Fermé"
+                                textViewStatusColor.textSize = 20f
+                                textViewStatusColor.setBackgroundColor(Color.parseColor("#FF0000"))
+                                textViewStatusColor.setTextColor(Color.parseColor("#FFFFFF"))
+                                textViewStatusColor.setPadding(0, 0, 0, 10)
+                                textViewStatusColor.gravity = Gravity.CENTER
+                                textViewStatusColor.layoutParams = LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.MATCH_PARENT,
+                                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                                    1f
+                                )
+                                container.addView(textViewStatusColor)
 
-                            // Add the container to the parent view
-                            linearlayout.addView(container)
+                                // Add the container to the parent view
+                                linearlayout.addView(container)
+                            }
                         }
                     }
                 }

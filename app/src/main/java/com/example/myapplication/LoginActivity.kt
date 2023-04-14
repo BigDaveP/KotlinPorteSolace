@@ -8,6 +8,7 @@ import android.util.Log
 import kotlinx.android.synthetic.main.activity_history.*
 import kotlinx.android.synthetic.main.activity_login.*
 import com.google.android.material.snackbar.Snackbar
+import io.github.cdimascio.dotenv.dotenv
 import okhttp3.*
 import java.io.IOException
 
@@ -18,22 +19,32 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         setSupportActionBar(toolbar)
+
         button.setOnClickListener {
             val user = editTextTextPersonName.text.toString()
             val pass = editTextTextPassword.text.toString()
             verifyConnection(user, pass)
             Log.d("user", user)
             Log.d("pass", pass)
-
-
         }
+
+
     }
 
     fun verifyConnection(user: String, pass: String) {
+        val dotenv = dotenv {
+            directory = "/assets"
+            filename = "env" // instead of '.env', use 'env'
+        }
+        val token = dotenv["TOKEN"]
+
+
         val url = "http://167.114.96.59:2223/api/authenticate/$user/$pass";
         val request = Request.Builder()
             .url(url)
+            .header("Authorization", "Bearer $token")
             .build()
+
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 e.printStackTrace()

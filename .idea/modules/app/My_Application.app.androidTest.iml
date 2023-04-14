@@ -74,6 +74,7 @@
                 <arg>$USER_HOME$/.gradle/caches/transforms-2/files-2.1/9109fe8175ef96101b53cadde8617764/jetified-okhttp-3.10.0.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-2/files-2.1/431e1925507886ad37d6c1cfc39928c3/jetified-gson-2.8.9.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-2/files-2.1/d50546da8b6eb0f524f9226ebf50268b/jetified-klaxon-5.5.jar</arg>
+                <arg>$USER_HOME$/.gradle/caches/transforms-2/files-2.1/bd770bf2b24bbd64d89df09559b7b548/jetified-java-dotenv-3.3.1.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-2/files-2.1/80b188252149a130536edbb95c23293a/jetified-kotlin-stdlib-1.3.61.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.constraintlayout/constraintlayout-solver/1.1.3/54abe9ffb22cc9019b0b6fcc10f185cc4e67b34e/constraintlayout-solver-1.1.3.jar</arg>
                 <arg>$USER_HOME$/.gradle/caches/transforms-2/files-2.1/452dfa9c95cc0ed63081d9aea56b3431/jetified-okio-1.14.0.jar</arg>
@@ -169,6 +170,7 @@
     <orderEntry type="library" scope="TEST" name="Gradle: com.squareup.okhttp3:okhttp:3.10.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.google.code.gson:gson:2.8.9" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.beust:klaxon:5.5" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: io.github.cdimascio:java-dotenv:3.3.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.3.61" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: androidx.constraintlayout:constraintlayout-solver:1.1.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.squareup.okio:okio:1.14.0" level="project" />
