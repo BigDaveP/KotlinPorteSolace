@@ -28,6 +28,10 @@ class LoginActivity : AppCompatActivity() {
             Log.d("pass", pass)
         }
 
+        parametre.setOnClickListener {
+            val intent = Intent(this, SettingActivity::class.java)
+            startActivity(intent)
+        }
 
     }
 
@@ -38,39 +42,58 @@ class LoginActivity : AppCompatActivity() {
         }
         val token = dotenv["TOKEN"]
 
+        // find the url in shared preferences
+        val sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE)
+        var url = sharedPreferences.getString("URL", null)
+        url = if (url == null) "http://167.114.96.59:2223/api/authenticate/$user/$pass"
+        else "$url/api/authenticate/$user/$pass"
 
-        val url = "http://167.114.96.59:2223/api/authenticate/$user/$pass";
-        val request = Request.Builder()
-            .url(url)
-            .header("Authorization", "Bearer $token")
-            .build()
-
+        // Verify if the url is valid
+        val request = token?.let {
+            try {
+                Request.Builder()
+                    .url(url)
+                    .header("Authorization", "Bearer $token")
+                    .build()
+            } catch (e: IllegalArgumentException) {
+                Snackbar.make(
+                    findViewById(android.R.id.content),
+                    "Connection impossible... Vérifiez l'adresse de votre l'API dans les paramètres",
+                    Snackbar.LENGTH_LONG
+                ).show()
+                return
+            }
+        }
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-                e.printStackTrace()
+                Snackbar.make(
+                    findViewById(android.R.id.content),
+                    "Adresse invalide",
+                    Snackbar.LENGTH_LONG
+                ).show()
             }
 
             override fun onResponse(call: Call, response: Response) {
                 response.use {
-                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
-                    if (response.body()!!.string() == "true") {
-                        Log.d("response", "true")
-                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                    } else {
-                        Log.d("response", "false")
-                        runOnUiThread {
-                            Snackbar.make(
-                                findViewById(android.R.id.content),
-                                "Mauvais identifiants",
-                                Snackbar.LENGTH_LONG
-                            ).show()
-                        }
+                    if (!response.isSuccessful) {
+                        Snackbar.make(
+                            findViewById(android.R.id.content),
+                            "Adresse invalide",
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                        throw IOException("Unexpected code $response")
                     }
+                    Snackbar.make(
+                        findViewById(android.R.id.content),
+                        "Adresse valide",
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                    startActivity(intent)
                 }
             }
         })
+
     }
 
 }

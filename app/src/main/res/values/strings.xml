@@ -12,4 +12,5 @@
     <string name="http_167_114_96_59_2223">http://167.114.96.59:2223</string>
     <string name="adresse_de_l_api">Adresse de l\'API :</string>
     <string name="adresse_ip_du_broker">Adresse IP du broker :</string>
+    <string name="enregistrer">Enregistrer</string>
 </resources>

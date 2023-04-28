@@ -61,7 +61,6 @@ class MainActivity : AppCompatActivity() {
         textViewMsgPayload.movementMethod = ScrollingMovementMethod()
         setMqttCallBack()
         getSerrures()
-        // initialize 'num msgs received' field in the view
 
         btnHistory.setOnClickListener {
             val intent = Intent(this@MainActivity, HistoryActivity::class.java)

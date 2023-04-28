@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:ignore="ExtraText">
+    tools:ignore="ExtraText"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="-89dp">
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:layout_editor_absoluteX="65dp"
     tools:layout_editor_absoluteY="0dp"
@@ -14,45 +16,73 @@
         android:id="@+id/textView"
         android:layout_width="141dp"
         android:layout_height="27dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginLeft="52dp"
+        android:layout_marginTop="330dp"
         android:layout_marginBottom="20dp"
         android:text="@string/adresse_ip_du_broker"
         app:layout_constraintBottom_toTopOf="@+id/editTextTextPersonName2"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="52dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.956"
+        tools:ignore="MissingConstraints" />
 
     <EditText
         android:id="@+id/editTextTextPersonName2"
         android:layout_width="273dp"
         android:layout_height="64dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginLeft="52dp"
+        android:layout_marginTop="284dp"
         android:autofillHints=""
         android:ems="10"
         android:inputType="textPersonName"
         android:text="@string/tcp_172_16_5_103_1883"
-        tools:ignore="LabelFor,MissingConstraints"
-        tools:layout_editor_absoluteX="52dp"
-        tools:layout_editor_absoluteY="377dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="LabelFor,MissingConstraints" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName3"
+        android:id="@+id/editTextTextAPIAdresse"
         android:layout_width="269dp"
         android:layout_height="57dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginLeft="52dp"
+        android:layout_marginTop="244dp"
         android:layout_marginBottom="28dp"
         android:autofillHints=""
         android:ems="30"
         android:inputType="textPersonName"
         android:text="@string/http_167_114_96_59_2223"
         app:layout_constraintBottom_toTopOf="@+id/textView"
-        tools:ignore="LabelFor,MissingConstraints"
-        tools:layout_editor_absoluteX="52dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.956"
+        tools:ignore="LabelFor,MissingConstraints" />
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="159dp"
         android:layout_height="29dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginLeft="52dp"
+        android:layout_marginTop="104dp"
         android:layout_marginBottom="20dp"
         android:text="@string/adresse_de_l_api"
         app:layout_constraintBottom_toTopOf="@+id/editTextTextPersonName3"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="52dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/enregistrerSetting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="153dp"
+        android:layout_marginLeft="153dp"
+        android:layout_marginTop="589dp"
+        android:text="@string/enregistrer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
