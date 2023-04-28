@@ -242,8 +242,14 @@ class MainActivity : AppCompatActivity() {
     //Permet de récupérer la liste des utilisateurs et de les afficher dans la liste "userList"
     @SuppressLint("SetTextI18n")
     fun CompareParseValueToSub (tagScan: String){
+        val dotenv = dotenv {
+            directory = "/assets"
+            filename = "env" // instead of '.env', use 'env'
+        }
+        val token = dotenv["TOKEN"]
         val request = Request.Builder()
             .url("http://167.114.96.59:2223/api/verifyTag/$tagScan")
+            .header("Authorization", "Bearer $token")
             .build()
 
         client.newCall(request).enqueue(object : Callback {

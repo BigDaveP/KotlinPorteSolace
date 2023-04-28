@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import com.beust.klaxon.Klaxon
 import com.example.myapplication.model.Logs
+import io.github.cdimascio.dotenv.dotenv
 import kotlinx.android.synthetic.main.activity_history.*
 import okhttp3.*
 import java.io.IOException
@@ -47,9 +48,15 @@ class HistoryActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun getHistory() {
+        val dotenv = dotenv {
+            directory = "/assets"
+            filename = "env" // instead of '.env', use 'env'
+        }
+        val token = dotenv["TOKEN"]
         val url = "http://167.114.96.59:2223/api/getLogs"
         val request = Request.Builder()
             .url(url)
+            .header("Authorization", "Bearer $token")
             .build()
         val client = OkHttpClient()
         client.newCall(request).enqueue(object : Callback {
