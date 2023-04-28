@@ -145,8 +145,6 @@ class MainActivity : AppCompatActivity() {
                                             v3.setBackgroundColor(Color.parseColor("#FF0000"))
                                         }
                                     }
-
-
                                 }
                             }
                         }
