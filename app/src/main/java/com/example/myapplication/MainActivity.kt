@@ -52,6 +52,12 @@ class MainActivity : AppCompatActivity() {
     }
     private val klaxon = Klaxon()
 
+    private val dotenv = dotenv {
+        directory = "/assets"
+        filename = "env" // instead of '.env', use 'env'
+    }
+    var token = dotenv["TOKEN"]
+
         // Redirection vers l'activité de l'historique
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
@@ -59,8 +65,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         textViewMsgPayload.movementMethod = ScrollingMovementMethod()
+
         setMqttCallBack()
         getSerrures()
+
 
         btnHistory.setOnClickListener {
             val intent = Intent(this@MainActivity, HistoryActivity::class.java)
@@ -114,8 +122,38 @@ class MainActivity : AppCompatActivity() {
                     CompareParseValueToSub(tag)
                     textViewMsgPayload.text = tag
                 }
+                // Get all child of the linear layout and get the textview text
+                val childCount = linearlayout.childCount
+                for (i in 0 until childCount) {
+                    val v = linearlayout.getChildAt(i)
+                    if (v is LinearLayout) {
+                        for (j in 0 until v.childCount) {
+                            val v2 = v.getChildAt(j)
+                            if (v2 is TextView) {
+                                // Remove part of the string that contain true or false
+                                var tagParse = tag.replace(" true", "")
+                                tagParse = tagParse.replace(" false", "")
+                                if (tagParse.trim() == v2.text.trim()) {
+                                    //get the next element
+                                    val v3 = v.getChildAt(j + 1)
+                                    if (v3 is TextView) {
+                                        if (mqttMessage.toString().contains("true")) {
+                                            v3.text = "Ouvert"
+                                            v3.setBackgroundColor(Color.parseColor("#00FF00"))
+                                        } else {
+                                            v3.text = "Fermé"
+                                            v3.setBackgroundColor(Color.parseColor("#FF0000"))
+                                        }
+                                    }
 
-                if (mqttMessage.toString().contains("C089 true")) {
+
+                                }
+                            }
+                        }
+                    }
+                }
+
+                /*if (mqttMessage.toString().contains("C089 true")) {
                     Log.d("Debug", "Oui")
                     for (i in 0 until serruresListID.size) {
                         Log.d("Debug", "ID: ${serruresListID[i]}")
@@ -127,7 +165,7 @@ class MainActivity : AppCompatActivity() {
                     Log.d("Debug", "Non")
                     /*textViewMsgSerrure1Status.text = "Fermé"
                     textViewMsgSerrure1Status.setBackgroundColor(Color.parseColor("#FF0000"))*/
-                }
+                }*/
             }
 
             override fun deliveryComplete(iMqttDeliveryToken: IMqttDeliveryToken) {
@@ -241,11 +279,6 @@ class MainActivity : AppCompatActivity() {
     //Permet de récupérer la liste des utilisateurs et de les afficher dans la liste "userList"
     @SuppressLint("SetTextI18n")
     fun CompareParseValueToSub (tagScan: String){
-        val dotenv = dotenv {
-            directory = "/assets"
-            filename = "env" // instead of '.env', use 'env'
-        }
-        val token = dotenv["TOKEN"]
         val request = Request.Builder()
             .url("http://167.114.96.59:2223/api/verifyTag/$tagScan")
             .header("Authorization", "Bearer $token")
@@ -289,6 +322,7 @@ class MainActivity : AppCompatActivity() {
         //Send to server
         val request = Request.Builder()
             .url(parseURL)
+            .header("Authorization", "Bearer $token")
             .build()
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
