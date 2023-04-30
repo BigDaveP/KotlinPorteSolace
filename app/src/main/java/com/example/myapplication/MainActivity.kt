@@ -101,13 +101,13 @@ class MainActivity : AppCompatActivity() {
     private fun setMqttCallBack() {
         mqttClient.setCallback(object : MqttCallbackExtended {
             override fun connectComplete(b: Boolean, s: String) {
-                val snackbarMsg = "Connected to host:\n'$SOLACE_MQTT_HOST'."
+                val snackbarMsg = "Connecté au serveur MQTT:\n'$SOLACE_MQTT_HOST'."
                 Log.w("Debug", snackbarMsg)
                 Snackbar.make(findViewById(android.R.id.content), snackbarMsg, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
             }
             override fun connectionLost(throwable: Throwable) {
-                val snackbarMsg = "Connection to host lost:\n'$SOLACE_MQTT_HOST'"
+                val snackbarMsg = "Connecté au serveur MQTT:\n'$SOLACE_MQTT_HOST'"
                 Log.w("Debug", snackbarMsg)
                 Snackbar.make(findViewById(android.R.id.content), snackbarMsg, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
@@ -115,7 +115,7 @@ class MainActivity : AppCompatActivity() {
             @SuppressLint("SetTextI18n")
             @Throws(Exception::class)
             override fun messageArrived(topic: String, mqttMessage: MqttMessage) {
-                Log.w("Debug", "Message received from host '$SOLACE_MQTT_HOST': $mqttMessage")
+                Log.w("Debug", "Message arrivé du serveur MQTT : '$SOLACE_MQTT_HOST': $mqttMessage")
                 tag = "";
                 if (mqttMessage.toString() != "true" || mqttMessage.toString() != "false") {
                     tag = "$mqttMessage\n"
