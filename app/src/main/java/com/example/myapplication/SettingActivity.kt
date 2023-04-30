@@ -97,7 +97,7 @@ class SettingActivity : AppCompatActivity() {
             if (!mqttClient.isConnected()) {
                 Snackbar.make(
                     findViewById(android.R.id.content),
-                    "Connection au serveur MQTT perdue",
+                    "Impossible de se connecter au broker MQTT",
                     Snackbar.LENGTH_LONG
                 ).show()
             }

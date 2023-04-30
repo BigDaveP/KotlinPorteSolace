@@ -83,13 +83,18 @@ class LoginActivity : AppCompatActivity() {
                         ).show()
                         throw IOException("Unexpected code $response")
                     }
-                    Snackbar.make(
-                        findViewById(android.R.id.content),
-                        "Adresse valide",
-                        Snackbar.LENGTH_LONG
-                    ).show()
-                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                    startActivity(intent)
+                    if(response.body()!!.string() == "true"){
+                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                        startActivity(intent)
+                    }
+                    else{
+                        Snackbar.make(
+                            findViewById(android.R.id.content),
+                            "Information invalide",
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                    }
+
                 }
             }
         })
