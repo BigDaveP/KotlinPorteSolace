@@ -1,7 +1,11 @@
 package com.example.myapplication
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
+import android.preference.PreferenceManager
+import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.myapplication.mqtt.MqttClientHelper
 import com.google.android.material.snackbar.Snackbar
@@ -11,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_setting.*
 import okhttp3.*
 import java.io.IOException
+import java.util.*
 
 class SettingActivity : AppCompatActivity() {
     private val mqttClient by lazy {
@@ -20,10 +25,80 @@ class SettingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setting)
+
+        spinner.adapter = android.widget.ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            listOf("Français", "English", "Россия", "Espagnol", "Deutsch", "Italiano", "Português", "中文", "日本語", "한국어")
+        )
+        spinner.setSelection(0)
+        spinner.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: android.widget.AdapterView<*>?) {
+                // Nothing to do
+            }
+
+            override fun onItemSelected(
+                parent: android.widget.AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val intent = intent
+                when (position) {
+                    0 -> {
+                        updateLocale("fr")
+                        snackbarMessage()
+                    }
+                    1 -> {
+                        updateLocale("en")
+                        snackbarMessage()
+                    }
+                    2 -> {
+                        updateLocale("ru")
+                    }
+                    3 -> {
+                        updateLocale("es")
+                    }
+                    4 -> {
+                        updateLocale("de")
+                    }
+                }
+            }
+        }
         enregistrerSetting.setOnClickListener {
             saveSetting()
         }
         editTextTextMQTTAdresse.setText(SOLACE_MQTT_HOST)
+
+
+    }
+
+    @SuppressLint("StringFormatInvalid")
+    private fun snackbarMessage() {
+        Snackbar.make(
+            findViewById(android.R.id.content),
+            getString(R.string.langue) + " " + spinner.selectedItem.toString(),
+            Snackbar.LENGTH_LONG
+        ).show()
+    }
+
+    private fun updateLocale(languageCode: String) {
+        val locale = Locale(languageCode)
+        if (locale == resources.configuration.locale) {
+            // Si la locale est la même, ne rien faire
+            return
+        }
+        Locale.setDefault(locale)
+        val config = resources.configuration
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
+        // Save data to shared preferences
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
+        val editor = sharedPref.edit()
+        editor.putString("language", languageCode)
+        editor.apply()
+        recreate()
+
     }
 
     // Permet de changer l'adresse de l'API

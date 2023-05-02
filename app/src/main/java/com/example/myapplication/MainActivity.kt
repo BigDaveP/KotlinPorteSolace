@@ -6,7 +6,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.os.Debug
+import android.preference.PreferenceManager
 import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.Gravity
@@ -14,30 +14,24 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
-import android.widget.PopupMenu
 import android.widget.TextView
-import android.widget.Toolbar
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.beust.klaxon.Klaxon
-import com.example.myapplication.model.Logs
 import com.example.myapplication.model.Serrures
 import com.example.myapplication.mqtt.MqttClientHelper
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
 import io.github.cdimascio.dotenv.dotenv
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import okhttp3.*
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken
 import org.eclipse.paho.client.mqttv3.MqttCallbackExtended
-import org.eclipse.paho.client.mqttv3.MqttException
 import org.eclipse.paho.client.mqttv3.MqttMessage
 import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.concurrent.schedule
-import kotlin.math.log
 
 
 class MainActivity : AppCompatActivity() {
@@ -58,17 +52,13 @@ class MainActivity : AppCompatActivity() {
     }
     var token = dotenv["TOKEN"]
 
-        // Redirection vers l'activité de l'historique
-
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         textViewMsgPayload.movementMethod = ScrollingMovementMethod()
-
         setMqttCallBack()
         getSerrures()
-
 
         btnHistory.setOnClickListener {
             val intent = Intent(this@MainActivity, HistoryActivity::class.java)
@@ -87,12 +77,28 @@ class MainActivity : AppCompatActivity() {
             if (!mqttClient.isConnected()) {
                 Snackbar.make(
                     findViewById(android.R.id.content),
-                    "Connection au serveur MQTT perdue",
+                        // get the string resource for the error message depending on the language
+                        R.string.erreur_mqtt,
                     Snackbar.LENGTH_LONG
                 ).show()
             }
         }
 
+    }
+
+    fun updateLocale(act: MainActivity, s: String) {
+        val languageCode = getLanguageCodeFromPreference() // obtenez le code de langue à partir des préférences de l'utilisateur
+        val locale = Locale(languageCode)
+        Locale.setDefault(locale)
+        val config = resources.configuration
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
+        recreate()
+    }
+
+    private fun getLanguageCodeFromPreference(): String {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        return sharedPreferences.getString("language_code", "fr") ?: "fr"
     }
 
     override fun onBackPressed() {
@@ -210,7 +216,6 @@ class MainActivity : AppCompatActivity() {
                 e.printStackTrace()
             }
 
-            @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
             @SuppressLint("RtlHardcoded")
             override fun onResponse(call: Call, response: Response) {
                 response.use {
@@ -336,7 +341,9 @@ class MainActivity : AppCompatActivity() {
         })
         }
 
-    }
+
+
+}
 
 
 

@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Система открытия</string>
+    <string name="action_settings">Настройки</string>
+    <string name="messages_received">Rx:</string>
+    <string name="publish_to_topic">Опубликовать в теме</string>
+    <string name="publish">Опубликовать</string>
+    <string name="subscribe">Подписаться</string>
+    <string name="subscribe_to_topic">Подписаться на тему</string>
+    <string name="message_payload">Содержание сообщения</string>
+    <string name="heading_msg_payload"><u>Полученные сообщения</u></string>
+    <string name="tcp_172_16_5_103_1883">tcp://172.16.5.103:1883</string>
+    <string name="http_167_114_96_59_2223">http://167.114.96.59:2223</string>
+    <string name="adresse_de_l_api">Адрес API:</string>
+    <string name="adresse_ip_du_broker">Адрес брокера:</string>
+    <string name="enregistrer">Сохранить</string>
+    <string name="connexion">Подключение</string>
+    <string name="se_connecter">Войти</string>
+    <string name="nom_d_utilisateur">Имя пользователя</string>
+    <string name="mot_de_passe">Пароль</string>
+    <string name="param_tre">Настройки</string>
+    <string name="historique">История</string>
+    <string name="retour">Назад</string>
+    <string name="s_lectionner_la_langue">выберите язык</string>
+    <string name="erreur_mqtt">Потеряно соединение с сервером MQTT</string>
+    <string name="langue">Язык изменен на : </string>
+</resources>

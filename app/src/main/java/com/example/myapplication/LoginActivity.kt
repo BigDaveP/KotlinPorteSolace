@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import kotlinx.android.synthetic.main.activity_history.*
 import kotlinx.android.synthetic.main.activity_login.*
@@ -11,6 +12,7 @@ import com.google.android.material.snackbar.Snackbar
 import io.github.cdimascio.dotenv.dotenv
 import okhttp3.*
 import java.io.IOException
+import java.util.*
 
 class LoginActivity : AppCompatActivity() {
     private val client = OkHttpClient()
@@ -35,6 +37,20 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
+    fun updateLocale(act: LoginActivity, s: String) {
+        val languageCode = getLanguageCodeFromPreference() // obtenez le code de langue à partir des préférences de l'utilisateur
+        val locale = Locale(languageCode)
+        Locale.setDefault(locale)
+        val config = resources.configuration
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
+        recreate()
+    }
+
+    private fun getLanguageCodeFromPreference(): String {
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        return sharedPreferences.getString("language_code", "fr") ?: "fr"
+    }
     fun verifyConnection(user: String, pass: String) {
         val dotenv = dotenv {
             directory = "/assets"

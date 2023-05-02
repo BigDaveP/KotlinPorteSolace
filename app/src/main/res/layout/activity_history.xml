@@ -57,7 +57,7 @@
         android:layout_marginStart="11dp"
         android:layout_marginLeft="11dp"
         android:layout_marginBottom="8dp"
-        android:text="Historique"
+        android:text="@string/historique"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/scrollView5"
         app:layout_constraintStart_toStartOf="parent"
@@ -70,7 +70,7 @@
         android:layout_marginStart="33dp"
         android:layout_marginLeft="33dp"
         android:layout_marginBottom="20dp"
-        android:text="Retour"
+        android:text="@string/retour"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
