@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.preference.PreferenceManager
@@ -29,7 +30,7 @@ class SettingActivity : AppCompatActivity() {
         spinner.adapter = android.widget.ArrayAdapter(
             this,
             android.R.layout.simple_spinner_dropdown_item,
-            listOf("Français", "English", "Россия", "Espagnol", "Deutsch", "Italiano", "Português", "中文", "日本語", "한국어")
+            listOf("fr", "en")
         )
         spinner.setSelection(0)
         spinner.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
@@ -43,28 +44,21 @@ class SettingActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-                val intent = intent
-                when (position) {
-                    0 -> {
-                        updateLocale("fr")
-                        snackbarMessage()
-                    }
-                    1 -> {
-                        updateLocale("en")
-                        snackbarMessage()
-                    }
-                    2 -> {
-                        updateLocale("ru")
-                    }
-                    3 -> {
-                        updateLocale("es")
-                    }
-                    4 -> {
-                        updateLocale("de")
-                    }
+                val language = when (position) {
+                    0 -> "fr"
+                    1 -> "en"
+                    else -> "en"
                 }
+
+                updateLocale(language)
             }
         }
+
+        btnSaveLangue.setOnClickListener {
+            updateLocale(spinner.selectedItem.toString())
+            finish()
+        }
+
         enregistrerSetting.setOnClickListener {
             saveSetting()
         }
@@ -82,6 +76,8 @@ class SettingActivity : AppCompatActivity() {
         ).show()
     }
 
+
+
     private fun updateLocale(languageCode: String) {
         val locale = Locale(languageCode)
         if (locale == resources.configuration.locale) {
@@ -92,13 +88,12 @@ class SettingActivity : AppCompatActivity() {
         val config = resources.configuration
         config.setLocale(locale)
         resources.updateConfiguration(config, resources.displayMetrics)
-        // Save data to shared preferences
+
+        // Sauvegarder la langue dans les préférences de l'application
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
         val editor = sharedPref.edit()
         editor.putString("language", languageCode)
         editor.apply()
-        recreate()
-
     }
 
     // Permet de changer l'adresse de l'API

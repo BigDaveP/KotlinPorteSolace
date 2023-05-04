@@ -17,6 +17,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="n">
+        <activity android:name=".MyApp"/>
         <activity
             android:name=".MainActivity"
             android:exported="false" />

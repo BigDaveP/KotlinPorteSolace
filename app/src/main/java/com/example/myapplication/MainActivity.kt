@@ -2,6 +2,8 @@ package com.example.myapplication
 
 
 import android.annotation.SuppressLint
+import android.app.Application
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -35,7 +37,6 @@ import kotlin.concurrent.schedule
 
 
 class MainActivity : AppCompatActivity() {
-
     var value = "";
     var isScanned = false
     var serruresListID = ArrayList<String>()
@@ -86,20 +87,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun updateLocale(act: MainActivity, s: String) {
-        val languageCode = getLanguageCodeFromPreference() // obtenez le code de langue à partir des préférences de l'utilisateur
-        val locale = Locale(languageCode)
-        Locale.setDefault(locale)
-        val config = resources.configuration
-        config.setLocale(locale)
-        resources.updateConfiguration(config, resources.displayMetrics)
-        recreate()
-    }
-
-    private fun getLanguageCodeFromPreference(): String {
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-        return sharedPreferences.getString("language_code", "fr") ?: "fr"
-    }
 
     override fun onBackPressed() {
         return
@@ -282,6 +269,7 @@ class MainActivity : AppCompatActivity() {
     //Permet de récupérer la liste des utilisateurs et de les afficher dans la liste "userList"
     @SuppressLint("SetTextI18n")
     fun CompareParseValueToSub (tagScan: String){
+        var isSend = false
         val request = Request.Builder()
             .url("http://167.114.96.59:2223/api/verifyTag/$tagScan")
             .header("Authorization", "Bearer $token")
@@ -297,19 +285,19 @@ class MainActivity : AppCompatActivity() {
                     if (!response.isSuccessful) throw IOException("Unexpected code $response")
                     value = response.body()!!.string()
                     if (mqttClient.isConnected()){
-                        var isSend = true
-                        if (isSend && value != "false"){
-                            val topic = "porte_sub"
-                            mqttClient.publish(topic, value)
-                            isSend = false
-                            saveToLog(tagScan, value)
-                            Log.d("Debug", value)
-                        }
+                        isSend = true
                     }
                 }
 
             }
         })
+        if (isSend && value != "false"){
+            val topic = "porte_sub"
+            mqttClient.publish(topic, value)
+            isSend = false
+            saveToLog(tagScan, value)
+            Log.d("Debug", value)
+        }
     }
 
     fun saveToLog(tagScan: String, value: String){

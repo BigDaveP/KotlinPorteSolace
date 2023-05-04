@@ -23,4 +23,5 @@
     <string name="s_lectionner_la_langue">Sélectionner la langue</string>
     <string name="erreur_mqtt">Connection au serveur MQTT perdue</string>
     <string name="langue">Langue changer pour : </string>
+    <string name="sauvegarder_la_langue">Sauvegarder la langue</string>
 </resources>
