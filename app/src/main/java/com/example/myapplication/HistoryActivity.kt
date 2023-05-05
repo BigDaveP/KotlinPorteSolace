@@ -1,3 +1,10 @@
+/**
+ * Auteur: David Pigeon
+ * Date: 5 mai 2023
+ * Version: 1.0
+ * Description: Cette activité affiche l'historique des serrures qui ont été ouvertes.
+ */
+
 package com.example.myapplication
 
 import android.annotation.SuppressLint

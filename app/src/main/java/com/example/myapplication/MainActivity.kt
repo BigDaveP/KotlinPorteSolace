@@ -1,5 +1,12 @@
-package com.example.myapplication
+/**
+ * Auteur: David Pigeon
+ * Date: 5 mai 2023
+ * Version: 1.0
+ * Description: Cette activité est l'écran d'accueil principal de l'application.
+ *              C'est là que notre utilisateur va pouvoir visualiser l'état de ses serrures.
+ */
 
+package com.example.myapplication
 
 import android.annotation.SuppressLint
 import android.app.Application

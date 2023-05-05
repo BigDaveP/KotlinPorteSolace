@@ -1,3 +1,14 @@
+/**
+ * Auteur: David Pigeon
+ * Date: 5 mai 2023
+ * Version: 1.0
+ * Description: Cette activité permet à l'utilisateur de modifier les paramètres de l'application.
+ *              Notament :
+ *                  - La langue de l'application
+ *                  - Le broker MQTT
+ *                  - L'adresse IP de l'API
+ */
+
 package com.example.myapplication
 
 import android.annotation.SuppressLint
@@ -27,6 +38,8 @@ class SettingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setting)
 
+
+        // Dropdown pour changer la langue
         spinner.adapter = android.widget.ArrayAdapter(
             this,
             android.R.layout.simple_spinner_dropdown_item,
@@ -55,6 +68,7 @@ class SettingActivity : AppCompatActivity() {
             }
         }
 
+        // Sauvegarder la langue dans les préférences de l'application et redémarrer l'application
         btnSaveLangue.setOnClickListener {
             updateLocale(spinner.selectedItem.toString())
             val intent = Intent(this, LoginActivity::class.java)
@@ -71,17 +85,8 @@ class SettingActivity : AppCompatActivity() {
 
     }
 
-    @SuppressLint("StringFormatInvalid")
-    private fun snackbarMessage() {
-        Snackbar.make(
-            findViewById(android.R.id.content),
-            getString(R.string.langue) + " " + spinner.selectedItem.toString(),
-            Snackbar.LENGTH_LONG
-        ).show()
-    }
 
-
-
+    // Permet de changer la langue de l'application en mettant à jour la configuration de l'application
     private fun updateLocale(languageCode: String) {
         val locale = Locale(languageCode)
         if (locale == resources.configuration.locale) {

@@ -1,3 +1,10 @@
+/**
+ * Auteur: David Pigeon
+ * Date: 5 mai 2023
+ * Version: 1.0
+ * Description: Cette activité permet à l'utilisateur de se connecter à l'application.
+ */
+
 package com.example.myapplication
 
 import android.annotation.SuppressLint
