@@ -36,8 +36,12 @@ class HistoryActivity : AppCompatActivity() {
             runOnUiThread {
                 progressBar2.setVisibility(View.INVISIBLE)
                 textViewAPI.text = ""
+                val tagID = getString(R.string.tagID)
+                val date = getString(R.string.date)
+                val user = getString(R.string.user)
+                val serrure = getString(R.string.serrure)
                 for (log in logs) {
-                    textViewAPI.text = textViewAPI.text.toString() + "Tag ID : " +log.UID + "\n Date : " + log.date + "\n Utilisateur : " + log.username + "\n Serrure : " + log.serrure + "\n\n"
+                    textViewAPI.text = textViewAPI.text.toString() + tagID + " : " +log.UID + "\n " +  date + " : " + log.date + "\n " + user + " : " + log.username + "\n " + serrure + " : " + log.serrure + "\n\n"
                     textViewAPI.text = textViewAPI.text.toString() + "--------------------------------------------\n\n\n"
                 }
             }

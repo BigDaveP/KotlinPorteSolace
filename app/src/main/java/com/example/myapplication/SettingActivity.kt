@@ -30,7 +30,7 @@ class SettingActivity : AppCompatActivity() {
         spinner.adapter = android.widget.ArrayAdapter(
             this,
             android.R.layout.simple_spinner_dropdown_item,
-            listOf("fr", "en")
+            listOf("fr", "en", "ru")
         )
         spinner.setSelection(0)
         spinner.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
@@ -47,6 +47,7 @@ class SettingActivity : AppCompatActivity() {
                 val language = when (position) {
                     0 -> "fr"
                     1 -> "en"
+                    2 -> "ru"
                     else -> "en"
                 }
 

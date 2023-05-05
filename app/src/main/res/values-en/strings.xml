@@ -25,4 +25,11 @@
     <string name="erreur_mqtt">Connection lost from MQTT server</string>
     <string name="langue">Change language to : </string>
     <string name="sauvegarder_la_langue">Save language</string>
+    <string name="mqtt_connect">Connected to MQTT server</string>
+    <string name="ouvert">Open</string>
+    <string name="ferme">Close</string>
+    <string name="tagID">Tag ID</string>
+    <string name="date">Date</string>
+    <string name="user">User</string>
+    <string name="serrure">Lock</string>
 </resources>
