@@ -101,13 +101,13 @@ class MainActivity : AppCompatActivity() {
     private fun setMqttCallBack() {
         mqttClient.setCallback(object : MqttCallbackExtended {
             override fun connectComplete(b: Boolean, s: String) {
-                val snackbarMsg = "Connecté au serveur MQTT:\n'$SOLACE_MQTT_HOST'."
+                val snackbarMsg = getString(R.string.mqtt_connect)
                 Log.w("Debug", snackbarMsg)
                 Snackbar.make(findViewById(android.R.id.content), snackbarMsg, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
             }
             override fun connectionLost(throwable: Throwable) {
-                val snackbarMsg = "Connecté au serveur MQTT:\n'$SOLACE_MQTT_HOST'"
+                val snackbarMsg = getString(R.string.erreur_mqtt)
                 Log.w("Debug", snackbarMsg)
                 Snackbar.make(findViewById(android.R.id.content), snackbarMsg, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
@@ -115,7 +115,6 @@ class MainActivity : AppCompatActivity() {
             @SuppressLint("SetTextI18n")
             @Throws(Exception::class)
             override fun messageArrived(topic: String, mqttMessage: MqttMessage) {
-                Log.w("Debug", "Message arrivé du serveur MQTT : '$SOLACE_MQTT_HOST': $mqttMessage")
                 tag = "";
                 if (mqttMessage.toString() != "true" || mqttMessage.toString() != "false") {
                     tag = "$mqttMessage\n"
@@ -138,10 +137,10 @@ class MainActivity : AppCompatActivity() {
                                     val v3 = v.getChildAt(j + 1)
                                     if (v3 is TextView) {
                                         if (mqttMessage.toString().contains("true")) {
-                                            v3.text = "Ouvert"
+                                            v3.text = getString(R.string.ouvert)
                                             v3.setBackgroundColor(Color.parseColor("#00FF00"))
                                         } else {
-                                            v3.text = "Fermé"
+                                            v3.text = getString(R.string.ferme)
                                             v3.setBackgroundColor(Color.parseColor("#FF0000"))
                                         }
                                     }
@@ -251,7 +250,7 @@ class MainActivity : AppCompatActivity() {
                                 //Create an id for the textview
                                 val id = View.generateViewId()
                                 serruresListID.add(textViewStatusColor.id.toString())
-                                textViewStatusColor.text = "Fermé"
+                                textViewStatusColor.text = getString(R.string.ferme)
                                 textViewStatusColor.textSize = 20f
                                 textViewStatusColor.setBackgroundColor(Color.parseColor("#FF0000"))
                                 textViewStatusColor.setTextColor(Color.parseColor("#FFFFFF"))

@@ -31,7 +31,7 @@
         android:layout_marginStart="152dp"
         android:layout_marginLeft="152dp"
         android:layout_marginBottom="72dp"
-        android:text="Historique"
+        android:text="@string/historique"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

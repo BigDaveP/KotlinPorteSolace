@@ -1,16 +1,30 @@
 <resources>
     <string name="app_name">Système d\'ouverture</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Paramètre</string>
     <string name="messages_received">Rx:</string>
-    <string name="publish_to_topic">Publish to topic</string>
-    <string name="publish">Publish</string>
-    <string name="subscribe">Subscribe</string>
-    <string name="subscribe_to_topic">Subscribe to topic</string>
-    <string name="message_payload">Message payload</string>
-    <string name="heading_msg_payload"><u>Received Message payloads</u></string>
+    <string name="publish_to_topic">Publier dans le topic</string>
+    <string name="publish">Publier</string>
+    <string name="subscribe">Subscire</string>
+    <string name="subscribe_to_topic">Subscrire au topic</string>
+    <string name="message_payload">Message reçu</string>
+    <string name="heading_msg_payload"><u>Nombre de message reçu</u></string>
     <string name="tcp_172_16_5_103_1883">tcp://172.16.5.103:1883</string>
     <string name="http_167_114_96_59_2223">http://167.114.96.59:2223</string>
     <string name="adresse_de_l_api">Adresse de l\'API :</string>
     <string name="adresse_ip_du_broker">Adresse IP du broker :</string>
     <string name="enregistrer">Enregistrer</string>
+    <string name="connexion">Connexion</string>
+    <string name="se_connecter">Se connecter</string>
+    <string name="nom_d_utilisateur">Nom d\'utilisateur</string>
+    <string name="mot_de_passe">Mot de passe</string>
+    <string name="param_tre">Paramètre</string>
+    <string name="historique">Historique</string>
+    <string name="retour">Retour</string>
+    <string name="s_lectionner_la_langue">Sélectionner la langue</string>
+    <string name="erreur_mqtt">Connection au serveur MQTT perdue</string>
+    <string name="langue">Langue changer pour : </string>
+    <string name="sauvegarder_la_langue">Sauvegarder la langue</string>
+    <string name="mqtt_connect">Connecté au serveur MQTT</string>
+    <string name="ouvert">Ouvert</string>
+    <string name="ferme">Fermé</string>
 </resources>

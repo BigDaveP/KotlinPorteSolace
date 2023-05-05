@@ -1,8 +1,11 @@
 package com.example.myapplication
 
 import android.annotation.SuppressLint
+import android.app.Application
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.View
 import com.beust.klaxon.Klaxon
 import com.example.myapplication.model.Logs
@@ -42,9 +45,8 @@ class HistoryActivity : AppCompatActivity() {
                 }
             }
         }).start()
-
-
     }
+
 
     @SuppressLint("SetTextI18n")
     private fun getHistory() {
