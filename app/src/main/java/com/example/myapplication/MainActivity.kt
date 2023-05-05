@@ -287,17 +287,18 @@ class MainActivity : AppCompatActivity() {
                     if (mqttClient.isConnected()){
                         isSend = true
                     }
+                    if (isSend && value != "false"){
+                        val topic = "porte_sub"
+                        mqttClient.publish(topic, value)
+                        isSend = false
+                        saveToLog(tagScan, value)
+                        Log.d("Debug", value)
+                    }
                 }
 
             }
         })
-        if (isSend && value != "false"){
-            val topic = "porte_sub"
-            mqttClient.publish(topic, value)
-            isSend = false
-            saveToLog(tagScan, value)
-            Log.d("Debug", value)
-        }
+
     }
 
     fun saveToLog(tagScan: String, value: String){

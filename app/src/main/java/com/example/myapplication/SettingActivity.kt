@@ -56,7 +56,10 @@ class SettingActivity : AppCompatActivity() {
 
         btnSaveLangue.setOnClickListener {
             updateLocale(spinner.selectedItem.toString())
-            finish()
+            val intent = Intent(this, LoginActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent)
         }
 
         enregistrerSetting.setOnClickListener {
