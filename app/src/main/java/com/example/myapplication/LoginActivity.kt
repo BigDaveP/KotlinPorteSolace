@@ -23,12 +23,12 @@ import java.util.*
 
 class LoginActivity : AppCompatActivity() {
     private val client = OkHttpClient()
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "AppCompatMethod")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        toolbar!!.title = getString(R.string.app_name)
         setSupportActionBar(toolbar)
-
         button.setOnClickListener {
             val user = editTextTextPersonName.text.toString()
             val pass = editTextTextPassword.text.toString()

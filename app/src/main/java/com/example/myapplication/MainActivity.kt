@@ -31,6 +31,7 @@ import com.example.myapplication.model.Serrures
 import com.example.myapplication.mqtt.MqttClientHelper
 import com.google.android.material.snackbar.Snackbar
 import io.github.cdimascio.dotenv.dotenv
+import kotlinx.android.synthetic.main.activity_login.toolbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import okhttp3.*
@@ -67,7 +68,6 @@ class MainActivity : AppCompatActivity() {
         textViewMsgPayload.movementMethod = ScrollingMovementMethod()
         setMqttCallBack()
         getSerrures()
-
         btnHistory.setOnClickListener {
             val intent = Intent(this@MainActivity, HistoryActivity::class.java)
             startActivity(intent)
