@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Système d\'ouverture</string>
+    <string name="app_name">OPS</string>
     <string name="action_settings">Paramètre</string>
     <string name="messages_received">Rx:</string>
     <string name="publish_to_topic">Publier dans le topic</string>

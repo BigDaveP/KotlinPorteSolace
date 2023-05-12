@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Opening System</string>
+    <string name="app_name">OPS</string>
     <string name="action_settings">Settings</string>
     <string name="messages_received">Rx:</string>
     <string name="publish_to_topic">Publish to topic</string>
